@@ -74,6 +74,17 @@ contract PriceExercise is ChainlinkClient {
         priceFeedGreater = getLatestPrice() > price;
     }
 
+    /**
+     * Withdraw LINK from this contract
+     *
+     * NOTE: DO NOT USE THIS IN PRODUCTION AS IT CAN BE CALLED BY ANY ADDRESS.
+     * THIS IS PURELY FOR EXAMPLE PURPOSES ONLY.
+     */
+    function withdrawLink() external {
+        LinkTokenInterface linkToken = LinkTokenInterface(chainlinkTokenAddress());
+        require(linkToken.transfer(msg.sender, linkToken.balanceOf(address(this))), "Unable to transfer");
+    }
+
     function stringToBytes32(string memory source) public pure returns (bytes32 result) {
         bytes memory tempEmptyStringTest = bytes(source);
         if (tempEmptyStringTest.length == 0) {
@@ -84,5 +95,4 @@ contract PriceExercise is ChainlinkClient {
             result := mload(add(source, 32))
         }
     }
-
 }

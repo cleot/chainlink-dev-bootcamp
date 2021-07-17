@@ -6,16 +6,13 @@ from scripts.helpful_scripts import LOCAL_BLOCKCHAIN_ENVIRONMENTS, get_account, 
  
 @pytest.fixture
 def deploy_price_exercise(get_job_id, chainlink_fee):
-    # Arrange
-    #address = get_contract("btc_usd_price_feed").address
-    address = '0x6135b13325bfC4B00278B4abC5e20bbce2D6580e'
     # Arrange / Act
     price_exercise = PriceExercise.deploy(
         get_contract("oracle").address,
         get_job_id,
         chainlink_fee,
-        get_contract("link_token"),
-        address,
+        get_contract("link_token").address,
+        get_contract("btc_usd_price_feed").address,
         {"from": get_account()},
     )
     # Assert
@@ -60,17 +57,15 @@ def test_send_api_request_testnet(deploy_price_exercise, chainlink_fee):
     assert isinstance(price_exercise.priceFeedGreater(), bool)
     #assert price_exercise.volume() > 0
  
+
 def test_can_get_latest_price(get_job_id, chainlink_fee):
-    # Arrange
-    #address = get_contract("btc_usd_price_feed").address
-    address = '0x6135b13325bfC4B00278B4abC5e20bbce2D6580e'
     # Arrange / Act
     price_exercise = PriceExercise.deploy(
         get_contract("oracle").address,
         get_job_id,
         chainlink_fee,
         get_contract("link_token").address,
-        address,
+        get_contract("btc_usd_price_feed"),
         {"from": get_account()},
     )
     # price_exercise = deploy_price_exercise
@@ -78,4 +73,3 @@ def test_can_get_latest_price(get_job_id, chainlink_fee):
     value = price_exercise.getLatestPrice()
     assert isinstance(value, int)
     assert value > 0
- 
