@@ -7,7 +7,7 @@ def format_btcusd(btcusd):
 
 def main():
     price_exercise = PriceExercise[-1]
-    print("Reading data from {}".format(price_exercise.address))
+    print(f"Reading data from {price_exercise.address}")
     if price_exercise.price() == 0:
         print(
             "You may have to wait a minute and then call this again, unless on a local chain!"
